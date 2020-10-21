@@ -60,18 +60,18 @@ function _train(){
     case ${run_mode} in
     sp) train_cmd="python -u tools/train.py "${train_cmd} ;;
     mp)
-        rm -rf ./mylog
-        train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --selected_gpus=$CUDA_VISIBLE_DEVICES tools/train.py "${train_cmd}
-        log_parse_file="mylog/workerlog.0" ;;
+        rm -rf ./mylog_${model_name}
+        train_cmd="python -m paddle.distributed.launch --log_dir=./mylog_${model_name} --selected_gpus=$CUDA_VISIBLE_DEVICES tools/train.py "${train_cmd}
+        log_parse_file="mylog_${model_name}/workerlog.0" ;;
     *) echo "choose run_mode(sp or mp)"; exit 1;
     esac
 
     ${train_cmd} > ${log_file} 2>&1
     kill -9 `ps -ef|grep python |awk '{print $2}'`
 
-    if [ $run_mode = "mp" -a -d mylog ]; then
+    if [ $run_mode = "mp" -a -d mylog_${model_name} ]; then
         rm ${log_file}
-        cp mylog/`ls -l mylog/ | awk '/^[^d]/ {print $5,$9}' | sort -nr | head -1 | awk '{print $2}'` ${log_file}
+        cp mylog_${model_name}/`ls -l mylog_${model_name}/ | awk '/^[^d]/ {print $5,$9}' | sort -nr | head -1 | awk '{print $2}'` ${log_file}
     fi
 }
 

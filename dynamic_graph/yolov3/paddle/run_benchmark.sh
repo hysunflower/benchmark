@@ -66,7 +66,7 @@ function _train(){
 
     if [ $run_mode = "mp" -a -d mylog ]; then
         rm ${log_file}
-        cp mylog/workerlog.0 ${log_file}
+        cp mylog_${model_name}/`ls -l mylog_${model_name}/ | awk '/^[^d]/ {print $5,$9}' | sort -nr | head -1 | awk '{print $2}'` ${log_file} 
     fi
 }
 
