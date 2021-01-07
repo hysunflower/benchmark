@@ -69,4 +69,4 @@
 [submodule "PaddleClas"]
   path = PaddleClas
   url = https://github.com/PaddlePaddle/PaddleClas.git
-  branch = master
+  branch = dygraph-dev
